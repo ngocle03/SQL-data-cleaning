@@ -86,7 +86,7 @@ SET job_title = 'unemployed'
 WHERE job_title IS NULL OR TRIM(job_title) = '';
 ```
 
-## Step 3: Cleaned Data Preview
+## Cleaned Data Preview
 ```sql
 SELECT *
 FROM club_member_info_cleaned
