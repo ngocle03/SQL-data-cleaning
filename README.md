@@ -24,8 +24,8 @@ LIMIT 10;
 |mendie alexandrescu|46|single|malexandrescu8@state.gov|504-918-4753|34 Delladonna Terrace,New Orleans,Louisiana|Systems Administrator III|3/12/1921|
 | fey kloss|52|married|fkloss9@godaddy.com|808-177-0318|8976 Jackson Park,Honolulu,Hawaii|Chemical Engineer|11/5/2014|
 
-## Copy the table
-### Create a new table for cleaning
+## Step 1: Copy the table
+### Step 1.1: Create a new table for cleaning
 Generate a new table where we can manipulate and restructure the data without modifying the original set.
 ```sql
 CREATE TABLE club_member_info_cleaned (
@@ -39,8 +39,53 @@ CREATE TABLE club_member_info_cleaned (
 	membership_date VARCHAR(50)
 );
 ```
-### Copy all values from the original table
+### Step 1.2: Copy all values from the original table
 ```sql
 INSERT INTO club_member_info_cleaned
 SELECT * FROM club_member_info;
+```
+
+## Step 2: Clean the data
+### Step 2.1: Trim whitespace
+
+Leading and trailing spaces were removed using the `TRIM()` function in all text fields to ensure consistency.
+```sql
+UPDATE club_member_info_cleaned
+SET first_name = TRIM(first_name),
+    last_name = TRIM(last_name),
+    email = TRIM(email),
+    phone = TRIM(phone),
+    city = TRIM(city);
+```
+### Step 2.2: Fix inconsistent casing
+
+```sql
+UPDATE club_member_info_cleaned
+SET first_name = UPPER(first_name),
+    last_name = UPPER(last_name);
+```
+
+### Step 2.3: Filter out unrealistic ages
+```sql
+DELETE FROM club_member_info_cleaned
+WHERE age < 0 OR age > 80;
+```
+
+### Step 2.4: Standardize gender format
+```sql
+UPDATE club_member_info_cleaned
+SET gender = UPPER(gender)
+WHERE gender IS NOT NULL;
+```
+To remove invalid gender values:
+```sql
+DELETE FROM club_member_info_cleaned
+WHERE gender NOT IN ('M', 'F');
+```
+
+## Step 3: Cleaned Data Preview
+```sql
+SELECT *
+FROM club_member_info_cleaned
+LIMIT 10;
 ```
