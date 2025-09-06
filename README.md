@@ -86,6 +86,58 @@ SET job_title = 'unemployed'
 WHERE job_title IS NULL OR TRIM(job_title) = '';
 ```
 
+### Step 2.5: Find and remove duplicates
+Find duplicate records:
+```sql
+SELECT
+  full_name,
+  email,
+  phone,
+  COUNT(*) AS duplicate_count
+FROM
+  users -- Replace 'users' with your table name.
+GROUP BY
+  full_name,
+  email,
+  phone
+HAVING
+  COUNT(*) > 1;
+```
+Delete all but one of the duplicate records:
+```sql
+DELETE FROM
+  users
+WHERE
+  -- Check if the row's full_name, email, and phone combination is a duplicate.
+  (full_name, email, phone) IN (
+    SELECT
+      full_name,
+      email,
+      phone
+    FROM
+      users
+    GROUP BY
+      full_name,
+      email,
+      phone
+    HAVING
+      COUNT(*) > 1
+  );
+
+AND id NOT IN (
+    SELECT
+      MIN(id)
+    FROM
+      users
+    GROUP BY
+      full_name,
+      email,
+      phone
+    HAVING
+      COUNT(*) > 1
+  );
+```
+
 ## Cleaned Data Preview
 ```sql
 SELECT *
