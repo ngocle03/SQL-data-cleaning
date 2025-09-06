@@ -108,7 +108,6 @@ Delete all but one of the duplicate records:
 DELETE FROM
   users
 WHERE
-  -- Check if the row's full_name, email, and phone combination is a duplicate.
   (full_name, email, phone) IN (
     SELECT
       full_name,
