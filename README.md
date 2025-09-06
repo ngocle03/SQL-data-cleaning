@@ -122,19 +122,6 @@ WHERE
     HAVING
       COUNT(*) > 1
   );
-
-AND id NOT IN (
-    SELECT
-      MIN(id)
-    FROM
-      club_member_info_cleaned
-    GROUP BY
-      full_name,
-      email,
-      phone
-    HAVING
-      COUNT(*) > 1
-  );
 ```
 
 ## Cleaned Data Preview
