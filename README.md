@@ -95,7 +95,7 @@ SELECT
   phone,
   COUNT(*) AS duplicate_count
 FROM
-  users -- Replace 'users' with your table name.
+  club_member_info_cleaned
 GROUP BY
   full_name,
   email,
@@ -106,7 +106,7 @@ HAVING
 Delete all but one of the duplicate records:
 ```sql
 DELETE FROM
-  users
+  club_member_info_cleaned
 WHERE
   (full_name, email, phone) IN (
     SELECT
@@ -114,7 +114,7 @@ WHERE
       email,
       phone
     FROM
-      users
+      club_member_info_cleaned
     GROUP BY
       full_name,
       email,
@@ -127,7 +127,7 @@ AND id NOT IN (
     SELECT
       MIN(id)
     FROM
-      users
+      club_member_info_cleaned
     GROUP BY
       full_name,
       email,
